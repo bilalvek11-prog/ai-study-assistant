@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Study Assistant</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f5fa;
+    color: #20243a;
+    min-height: 100vh;
+}
+
+header {
+    background: linear-gradient(120deg, #30246f, #6554c0);
+    color: white;
+    padding: 28px 8%;
+}
+
+header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+header p {
+    color: #e0dcff;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 850px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.intro h2 {
+    color: #392c80;
+    margin-bottom: 10px;
+}
+
+.intro p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.form-card {
+    background: white;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.07);
+}
+
+.section-title {
+    color: #42358c;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 9px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d9d9e5;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: white;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #6554c0;
+    box-shadow: 0 0 0 2px #6554c020;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: Arial, sans-serif;
+}
+
+.hint {
+    color: #888;
+    font-size: 12px;
+    margin-top: 7px;
+    line-height: 1.5;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(120deg, #493a9a, #7463d1);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#result {
+    display: none;
+    margin-top: 25px;
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.07);
+}
+
+#result h2 {
+    color: #42358c;
+    margin-bottom: 15px;
+}
+
+#answer {
+    white-space: pre-wrap;
+    line-height: 1.8;
+    color: #333;
+    font-size: 15px;
+    overflow-wrap: anywhere;
+}
+
+.status {
+    text-align: center;
+    margin: 15px 0;
+    color: #6554c0;
+    font-size: 14px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #777;
+    font-size: 13px;
+}
+
+@media(max-width: 600px) {
+    header {
+        padding: 23px 5%;
+    }
+
+    header h1 {
+        font-size: 23px;
+    }
+
+    .container {
+        margin: 25px auto;
+    }
+
+    .form-card {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎓 AI Study Assistant</h1>
+    <p>Your Personal AI Learning & Exam Preparation Partner</p>
+</header>
+
+<div class="container">
+
+    <div class="intro">
+        <h2>Smart Learning Starts Here!</h2>
+        <p>
+            Enter your subject and topic below.
+            Our AI assistant will help you understand
+            concepts, prepare notes and practice questions.
+        </p>
+    </div>
+
+    <div class="form-card">
+
+        <h3 class="section-title">
+            📚 Student Learning Details
+        </h3>
+
+        <form id="studyForm">
+
+            <div class="form-group">
+                <label for="apiKey">
+                    Gemini API Key
+                </label>
+                <input
+                    type="password"
+                    id="apiKey"
+                    placeholder="Enter your Gemini API key"
+                    required
+                >
+                <p class="hint">
+                    Get a key from Google AI Studio.
+                    Do not share your key or publish it in a public website.
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Select Subject</label>
+                <select id="subject" required>
+                    <option value="">Choose your subject</option>
+                    <option>Artificial Intelligence</option>
+                    <option>Engineering Physics</option>
+                    <option>Engineering Mathematics</option>
+                    <option>Basic Electronics</option>
+                    <option>Computer Programming</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="level">Education Level</label>
+                <select id="level">
+                    <option>First Year Engineering</option>
+                    <option>Diploma</option>
+                    <option>School Student</option>
+                    <option>College Student</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="mode">Select Study Mode</label>
+                <select id="mode">
+                    <option value="explain">
+                        Explain Topic
+                    </option>
+                    <option value="notes">
+                        Generate Short Notes
+                    </option>
+                    <option value="summary">
+                        Generate Summary
+                    </option>
+                    <option value="quiz">
+                        Generate Practice Questions
+                    </option>
+                    <option value="examples">
+                        Explain With Examples
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="length">Answer Length</label>
+                <select id="length">
+                    <option>Short and Simple</option>
+                    <option>Medium Detail</option>
+                    <option>Detailed Explanation</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="topic">Enter Your Topic or Question</label>
+                <textarea
+                    id="topic"
+                    placeholder="Example: Explain Artificial Intelligence in simple language..."
+                    required
+                ></textarea>
+            </div>
+
+            <button type="submit" id="generateBtn">
+                ✨ Generate Study Content
+            </button>
+
+        </form>
+
+        <div class="status" id="status"></div>
+
+    </div>
+
+    <div id="result">
+        <h2>📖 Your Study Result</h2>
+        <div id="answer"></div>
+    </div>
+
+</div>
+
+<footer>
+    AI Study Assistant | Mini Project 10.A
+    <br><br>
+    Developed using HTML, CSS, JavaScript and Gemini AI
+</footer>
+
+<script>
+
+const form = document.getElementById("studyForm");
+const button = document.getElementById("generateBtn");
+const status = document.getElementById("status");
+const result = document.getElementById("result");
+const answer = document.getElementById("answer");
+
+form.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const apiKey =
+        document.getElementById("apiKey").value.trim();
+
+    const subject =
+        document.getElementById("subject").value;
+
+    const level =
+        document.getElementById("level").value;
+
+    const mode =
+        document.getElementById("mode").value;
+
+    const length =
+        document.getElementById("length").value;
+
+    const topic =
+        document.getElementById("topic").value.trim();
+
+    if (!apiKey || !subject || !topic) {
+        alert("Please fill all required fields.");
+        return;
+    }
+
+    const modeInstructions = {
+        explain: "Explain the topic step by step in easy language.",
+        notes: "Create well-organized short study notes with headings and key points.",
+        summary: "Create a clear and concise summary of the topic.",
+        quiz: "Create 10 practice questions with answers at the end.",
+        examples: "Explain the topic with simple real-life and academic examples."
+    };
+
+    const prompt = `
+You are an educational AI Study Assistant.
+
+Subject: ${subject}
+Education Level: ${level}
+Study Mode: ${mode}
+Answer Length: ${length}
+Topic or Question: ${topic}
+
+Instructions:
+${modeInstructions[mode]}
+
+Use simple student-friendly language.
+Organize the answer with headings and bullet points.
+Make the answer educational and accurate.
+If information is uncertain, mention it clearly.
+`;
+
+    button.disabled = true;
+    button.innerText = "⏳ Generating...";
+    status.innerText = "Connecting to Gemini AI...";
+    result.style.display = "block";
+    answer.innerText = "Please wait while your study content is generated.";
+
+    try {
+
+        const response = await fetch(
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-goog-api-key": apiKey
+                },
+
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: prompt
+                        }]
+                    }]
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error?.message || "Unable to generate content."
+            );
+        }
+
+        const generatedText =
+            data.candidates?.[0]?.content?.parts
+                ?.map(part => part.text || "")
+                .join("\n");
+
+        if (!generatedText) {
+            throw new Error("No study content was returned.");
+        }
+
+        answer.innerText = generatedText;
+        status.innerText = "✅ Study content generated successfully!";
+
+    } catch (error) {
+
+        answer.innerText =
+            "Error: " + error.message +
+            "\n\nPlease check your API key, internet connection and API access.";
+
+        status.innerText = "Unable to generate content.";
+
+    } finally {
+
+        button.disabled = false;
+        button.innerText = "✨ Generate Study Content";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
